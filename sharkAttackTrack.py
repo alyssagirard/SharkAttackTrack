@@ -56,19 +56,14 @@ plt.grid(True)
 plt.show()
 
 
-# Filter out rows where age is available and 'Fatal (Y/N)' is either 'Y' or 'N'
 filtered_data = data[data['Age'].notnull() & data['Fatal (Y/N)'].isin(['Y', 'N'])]
-# Convert 'Age' column to numeric (assuming it's stored as strings)
 filtered_data.loc[:, 'Age'] = pd.to_numeric(filtered_data['Age'], errors='coerce')
-# Group the data by age and count the occurrences of 'Y' and 'N' in 'Fatal (Y/N)'
 fatal_counts = filtered_data.groupby(['Age', 'Fatal (Y/N)']).size().unstack(fill_value=0)
-# Plot the bar plot
 fatal_counts.plot(kind='bar', stacked=True, figsize=(12, 6))
 plt.title('Fatal and Non-fatal Shark Attacks by Age')
 plt.xlabel('Age of Victim')
 plt.ylabel('Number of Attacks')
 plt.xticks(rotation=90)
-# Remove the .0 after ages in the x-axis
 plt.gca().xaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: '{:.0f}'.format(x)))
 plt.legend(title='Fatal Outcome')
 plt.grid(axis='y')
